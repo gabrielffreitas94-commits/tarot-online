@@ -1,5 +1,6 @@
 import { DrawnCard, SpreadHouse, SpreadType } from '../types/tarot.ts';
 import { CardSlot } from './CardSlot.tsx';
+import { t } from '../i18n/index.ts';
 
 export interface TarotTableProps {
   spreadType: SpreadType;
@@ -27,7 +28,7 @@ export function TarotTable({
   if (slots.length === 0) {
     return (
       <div className="w-full min-h-[350px] flex items-center justify-center text-gray-500 italic">
-        Embaralhando arcanos sagrados...
+        {t('reading.shuffling_deck')}
       </div>
     );
   }
@@ -109,7 +110,7 @@ export function TarotTable({
         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center pt-2 border-t border-gold/15">
           {/* Path A Column */}
           <div className="flex flex-col items-center gap-6 p-4 rounded-2xl bg-celestial-900/30 border border-gold/20 w-full max-w-sm">
-            <div className="text-gold font-serif font-bold text-sm tracking-widest uppercase">Caminho A</div>
+            <div className="text-gold font-serif font-bold text-sm tracking-widest uppercase">{t('spreads.decision.path_a_title')}</div>
             <div className="flex flex-wrap justify-center gap-4">
               {pathASlots.map(({ house, drawnCard }) => (
                 <CardSlot
@@ -126,7 +127,7 @@ export function TarotTable({
 
           {/* Path B Column */}
           <div className="flex flex-col items-center gap-6 p-4 rounded-2xl bg-celestial-900/30 border border-gold/20 w-full max-w-sm">
-            <div className="text-gold font-serif font-bold text-sm tracking-widest uppercase">Caminho B</div>
+            <div className="text-gold font-serif font-bold text-sm tracking-widest uppercase">{t('spreads.decision.path_b_title')}</div>
             <div className="flex flex-wrap justify-center gap-4">
               {pathBSlots.map(({ house, drawnCard }) => (
                 <CardSlot
@@ -155,7 +156,7 @@ export function TarotTable({
       <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center lg:items-start justify-center gap-8 py-6">
         {/* Left Section: The Cross (6 cards in responsive layout) */}
         <div className="flex-1 flex flex-col items-center">
-          <div className="text-xs font-serif text-gold uppercase tracking-wider mb-4">A Cruz Central</div>
+          <div className="text-xs font-serif text-gold uppercase tracking-wider mb-4">{t('spreads.celtic_cross.cross_title')}</div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 justify-items-center">
             {crossSlots.map(({ house, drawnCard }) => (
               <CardSlot
@@ -172,7 +173,7 @@ export function TarotTable({
 
         {/* Right Section: The Staff/Pillar (4 cards) */}
         <div className="w-full lg:w-72 flex flex-col items-center p-4 rounded-2xl bg-celestial-900/40 border border-gold/20">
-          <div className="text-xs font-serif text-gold uppercase tracking-wider mb-4">O Bastão da Conclusão</div>
+          <div className="text-xs font-serif text-gold uppercase tracking-wider mb-4">{t('spreads.celtic_cross.staff_title')}</div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-5 justify-items-center">
             {staffSlots.map(({ house, drawnCard }) => (
               <CardSlot

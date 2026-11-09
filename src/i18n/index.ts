@@ -2,6 +2,7 @@ import { SupportedLanguage } from '../types/tarot.ts';
 import { CardMeaning, HouseTranslation } from './types.ts';
 import { UI_TRANSLATIONS } from './locales/uiTranslations.ts';
 import { getCardData } from './locales/cardsData.ts';
+import { safeGetStorage, safeSetStorage } from '../utils/storage.ts';
 
 export const SUPPORTED_LANGUAGES: SupportedLanguage[] = ['pt-BR', 'en', 'es', 'fr', 'it', 'de'];
 
@@ -20,12 +21,12 @@ let currentLanguage: SupportedLanguage = getInitialLanguage();
 const listeners = new Set<(lang: SupportedLanguage) => void>();
 
 export function getInitialLanguage(): SupportedLanguage {
-  if (typeof window !== 'undefined') {
-    const saved = localStorage.getItem(STORAGE_KEY) as SupportedLanguage | null;
-    if (saved && SUPPORTED_LANGUAGES.includes(saved)) {
-      return saved;
-    }
+  const saved = safeGetStorage(STORAGE_KEY) as SupportedLanguage | null;
+  if (saved && SUPPORTED_LANGUAGES.includes(saved)) {
+    return saved;
+  }
 
+  if (typeof window !== 'undefined') {
     const browserLang = navigator.language?.toLowerCase() || '';
     if (browserLang.startsWith('pt')) return 'pt-BR';
     if (browserLang.startsWith('es')) return 'es';
@@ -44,9 +45,7 @@ export function getCurrentLanguage(): SupportedLanguage {
 export function setLanguage(lang: SupportedLanguage): void {
   if (SUPPORTED_LANGUAGES.includes(lang)) {
     currentLanguage = lang;
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(STORAGE_KEY, lang);
-    }
+    safeSetStorage(STORAGE_KEY, lang);
     listeners.forEach((fn) => fn(lang));
   }
 }

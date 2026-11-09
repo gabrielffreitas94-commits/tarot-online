@@ -30,6 +30,7 @@ import { TarotTable } from './components/TarotTable.tsx';
 import { SummaryBar } from './components/SummaryBar.tsx';
 import { CardModal } from './components/CardModal.tsx';
 import { Sparkles } from 'lucide-react';
+import { copyToClipboard } from './utils/clipboard.ts';
 
 export function App() {
   // Global preferences
@@ -123,7 +124,7 @@ export function App() {
     setModalSlot({ card, house });
   };
 
-  // Copy Reading Summary to Clipboard
+  // Copy Reading Summary to Clipboard with robust fallback cascade
   const handleCopySummary = async () => {
     const spreadTitle = t(SPREADS[selectedSpread].nameKey);
     const dateStr = new Date().toLocaleDateString(
@@ -137,41 +138,29 @@ export function App() {
     drawnCards.forEach((drawn, index) => {
       const house = activeHouses[index];
       const isRevealed = revealedCardIds.has(drawn.card.id);
-      const houseInfo = house ? getHouseTranslation(house.nameKey, house.descKey) : { name: `Casa ${index + 1}` };
+      const houseInfo = house
+        ? getHouseTranslation(house.nameKey, house.descKey)
+        : { name: `${t('reading.house')} ${index + 1}` };
 
       if (!isRevealed) {
-        summaryText += `[${houseInfo.name}]: (Carta não revelada)\n`;
+        summaryText += `[${houseInfo.name}]: ${t('reading.unrevealed_card')}\n`;
       } else {
         const cardInfo = getCardTranslation(drawn.card.id);
         const orientation = drawn.isReversed ? ` (${t('reading.reversed')})` : '';
         const meaning = drawn.isReversed ? cardInfo.reversed : cardInfo.upright;
 
         summaryText += `🔮 ${houseInfo.name}: ${cardInfo.name}${orientation}\n`;
-        summaryText += `   Palavras-chave: ${cardInfo.keywords.join(', ')}\n`;
-        summaryText += `   Significado: ${meaning}\n\n`;
+        summaryText += `   ${t('reading.keywords')}: ${cardInfo.keywords.join(', ')}\n`;
+        summaryText += `   ${meaning}\n\n`;
       }
     });
 
-    summaryText += `\nConsulte novamente em Tarot Online.`;
+    summaryText += `\n${t('reading.consult_again')}`;
 
-    try {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(summaryText);
-        setIsCopied(true);
-        setTimeout(() => setIsCopied(false), 2500);
-      } else {
-        // Fallback for non-secure contexts
-        const textarea = document.createElement('textarea');
-        textarea.value = summaryText;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-        setIsCopied(true);
-        setTimeout(() => setIsCopied(false), 2500);
-      }
-    } catch {
-      setIsCopied(false);
+    const copied = await copyToClipboard(summaryText);
+    setIsCopied(copied);
+    if (copied) {
+      setTimeout(() => setIsCopied(false), 2500);
     }
   };
 

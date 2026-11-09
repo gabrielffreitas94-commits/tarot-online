@@ -51,7 +51,7 @@ export function Header({
             type="button"
             onClick={onToggleDeckType}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-celestial-900 border border-gold/30 hover:border-gold text-gray-200 hover:text-gold transition-colors"
-            title="Alternar entre baralho completo de 78 cartas e apenas os 22 Arcanos Maiores"
+            title={t('settings.toggle_deck_tooltip')}
           >
             <Layers className="w-3.5 h-3.5 text-gold" />
             <span className="font-medium">
@@ -68,7 +68,7 @@ export function Header({
                 ? 'bg-gold/20 border-gold text-gold font-semibold'
                 : 'bg-celestial-900 border-gold/30 text-gray-400 hover:text-gray-200'
             }`}
-            title="Ativar ou desativar cartas invertidas nas tiragens"
+            title={t('settings.toggle_reversed_tooltip')}
           >
             <RotateCw className={`w-3.5 h-3.5 ${allowReversed ? 'text-gold' : 'text-gray-500'}`} />
             <span>{t('settings.allow_reversed')}</span>

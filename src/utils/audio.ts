@@ -1,15 +1,15 @@
+import { safeGetStorage, safeSetStorage } from './storage.ts';
+
 const STORAGE_KEY = 'tarot_audio_muted';
 
 let audioCtx: AudioContext | null = null;
 let isMuted: boolean = false;
 const audioListeners = new Set<(muted: boolean) => void>();
 
-// Initialize mute state from localStorage if available
-if (typeof window !== 'undefined') {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved !== null) {
-    isMuted = saved === 'true';
-  }
+// Initialize mute state safely
+const savedMute = safeGetStorage(STORAGE_KEY);
+if (savedMute !== null) {
+  isMuted = savedMute === 'true';
 }
 
 /**
@@ -18,18 +18,22 @@ if (typeof window !== 'undefined') {
 function getAudioContext(): AudioContext | null {
   if (typeof window === 'undefined') return null;
 
-  if (!audioCtx) {
-    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-    if (AudioContextClass) {
-      audioCtx = new AudioContextClass();
+  try {
+    if (!audioCtx) {
+      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      if (AudioContextClass) {
+        audioCtx = new AudioContextClass();
+      }
     }
-  }
 
-  if (audioCtx && audioCtx.state === 'suspended') {
-    audioCtx.resume().catch(() => {});
-  }
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
+    }
 
-  return audioCtx;
+    return audioCtx;
+  } catch {
+    return null;
+  }
 }
 
 export function isAudioMuted(): boolean {
@@ -38,9 +42,7 @@ export function isAudioMuted(): boolean {
 
 export function setAudioMuted(muted: boolean): void {
   isMuted = muted;
-  if (typeof window !== 'undefined') {
-    localStorage.setItem(STORAGE_KEY, String(muted));
-  }
+  safeSetStorage(STORAGE_KEY, String(muted));
   audioListeners.forEach((fn) => fn(muted));
 }
 

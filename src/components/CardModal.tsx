@@ -13,20 +13,21 @@ export interface CardModalProps {
 export function CardModal({ card, house, isOpen, onClose }: CardModalProps) {
   const [imageError, setImageError] = useState(false);
 
-  // Close on Escape key press
+  // Close on Escape key press and manage body scroll
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
       }
     };
+    const prevOverflow = document.body.style.overflow;
     if (isOpen) {
       window.addEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'hidden';
     }
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = prevOverflow;
     };
   }, [isOpen, onClose]);
 
@@ -144,7 +145,7 @@ export function CardModal({ card, house, isOpen, onClose }: CardModalProps) {
                 {t('reading.advice')}
               </div>
               <p className="text-xs text-gray-300 italic leading-normal">
-                "{cardData.name} na casa de {houseData.name} convida você a honrar sua sabedoria interior e agir com integridade cósmica."
+                {t('reading.advice_quote', { card: cardData.name, house: houseData.name })}
               </p>
             </div>
           </div>
