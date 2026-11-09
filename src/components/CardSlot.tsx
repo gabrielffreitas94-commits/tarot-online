@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { DrawnCard, SpreadHouse } from '../types/tarot.ts';
 import { CardBack } from './CardBack.tsx';
 import { getCardTranslation, getHouseTranslation, t } from '../i18n/index.ts';

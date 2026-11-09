@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DrawnCard, SpreadHouse } from '../types/tarot.ts';
 import { getCardTranslation, getHouseTranslation, t } from '../i18n/index.ts';
 import { X, Sparkles, Compass, ShieldAlert } from 'lucide-react';

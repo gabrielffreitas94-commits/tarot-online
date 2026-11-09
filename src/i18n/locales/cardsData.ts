@@ -987,7 +987,6 @@ const SUIT_ARCHETYPES: Record<string, Record<SupportedLanguage, { upright: strin
       kw: ['Aria', 'Mente', 'Verità', 'Lucidità'],
     },
     'de': {
-      name: '',
       upright: 'Geistige Klarheit, objektive Wahrheit, scharfer Verstand und Mut.',
       reversed: 'Gedankenkarussell, harte Worte, Missverständnisse, quälende Zweifel.',
       kw: ['Luft', 'Verstand', 'Wahrheit', 'Klarheit'],

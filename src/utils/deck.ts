@@ -1,5 +1,5 @@
 import { ALL_CARDS, MAJOR_ARCANA } from '../data/cards.ts';
-import { ArcanaType, DrawnCard, TarotCard } from '../types/tarot.ts';
+import { DrawnCard, TarotCard } from '../types/tarot.ts';
 
 export const TAROT_DECK = ALL_CARDS;
 
